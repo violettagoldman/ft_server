@@ -43,7 +43,12 @@ RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.9.1/phpMyAdmin-4.9.1-english.
 RUN mkdir /home/root/www/phpmyadmin
 RUN tar xzf phpMyAdmin-4.9.1-english.tar.gz --strip-components=1 -C /home/root/www/phpmyadmin
 
+#certificate creation
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=FR/ST=France/L=Paris/O=42/CN=localhost" -keyout /etc/ssl/private/nginx_server.key -out /etc/ssl/certs/nginx_server.crt
+RUN openssl dhparam -out /etc/nginx/dhparam.pem 1000
+
 #run the server
 CMD sh /home/root/services.sh && /bin/sh
 
 EXPOSE 80
+EXPOSE 443
